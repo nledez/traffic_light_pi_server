@@ -5,7 +5,19 @@ describe "My Traffic light server" do
   include Rack::Test::Methods
 
   def app
-    @app || TrafficLightPiServer
+    line_mapping = {
+      0 => {
+        :green => 12,
+        :orange => 13,
+        :red => 14
+      },
+      1 => {
+        :green => 4,
+        :red => 5
+      }
+    }
+
+    @app || TrafficLightPiServer.new(line_mapping)
   end
 
   # Do a root test
@@ -17,36 +29,36 @@ describe "My Traffic light server" do
   it "should get 0 for /0/red" do
     get '/0/red'
     last_response.should be_ok
-    last_response.body.should == "0"
+    last_response.body.should == "14:0"
   end
 
   it "should get 0 for /1/red" do
     get '/1/red'
-    last_response.body.should == "0"
+    last_response.body.should == "5:0"
   end
 
   it "should get 0 for /0/green" do
     get '/0/green'
-    last_response.body.should == "0"
+    last_response.body.should == "12:0"
   end
 
   it "should change color for /0/green" do
     get '/0/green/0'
 
     get '/0/green'
-    last_response.body.should == "0"
+    last_response.body.should == "12:0"
 
     get '/0/green/1'
-    last_response.body.should == "1"
+    last_response.body.should == "12:1"
 
     get '/0/green'
-    last_response.body.should == "1"
+    last_response.body.should == "12:1"
 
     get '/0/green/0'
-    last_response.body.should == "0"
+    last_response.body.should == "12:0"
 
     get '/0/green'
-    last_response.body.should == "0"
+    last_response.body.should == "12:0"
   end
 
   it "should change color for /0/red and keep green status" do
@@ -54,16 +66,16 @@ describe "My Traffic light server" do
     get '/0/red/0'
 
     get '/0/red'
-    last_response.body.should == "0"
+    last_response.body.should == "14:0"
 
     get '/0/red/1'
-    last_response.body.should == "1"
+    last_response.body.should == "14:1"
 
     get '/0/red'
-    last_response.body.should == "1"
+    last_response.body.should == "14:1"
 
     get '/0/green'
-    last_response.body.should == "0"
+    last_response.body.should == "12:0"
   end
 
   it "should change color for /1/red and keep /0/red status" do
@@ -71,15 +83,15 @@ describe "My Traffic light server" do
     get '/1/red/0'
 
     get '/0/red'
-    last_response.body.should == "0"
+    last_response.body.should == "14:0"
 
     get '/0/red/1'
-    last_response.body.should == "1"
+    last_response.body.should == "14:1"
 
     get '/0/red'
-    last_response.body.should == "1"
+    last_response.body.should == "14:1"
 
     get '/1/red'
-    last_response.body.should == "0"
+    last_response.body.should == "5:0"
   end
 end
