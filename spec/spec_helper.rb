@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '..', 'traffic_light_pi_server.rb')
+require File.join(File.dirname(__FILE__), '../lib', 'traffic_light_pi_server.rb')
 
 require 'rack/test'
 require 'rspec'

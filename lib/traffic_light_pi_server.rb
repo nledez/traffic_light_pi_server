@@ -29,6 +29,4 @@ class TrafficLightPiServer < Sinatra::Base
 
     @@lines[line][color] = state
   end
-
-  run! if app_file == $0
 end
