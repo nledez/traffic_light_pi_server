@@ -14,8 +14,6 @@ class TrafficLightPiServer < Sinatra::Base
         :red => 5
       }
     }
-
-    @@lines = Hash.new(Hash.new(0))
   end
 end
 
