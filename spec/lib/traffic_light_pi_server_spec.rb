@@ -17,7 +17,6 @@ describe "My Traffic light server" do
           :red => 5
         }
       }
-      @@lines = Hash.new(Hash.new(0))
     end
   end
 
