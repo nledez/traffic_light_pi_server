@@ -4,20 +4,25 @@ set :environment, :test
 describe "My Traffic light server" do
   include Rack::Test::Methods
 
-  def app
-    line_mapping = {
-      0 => {
-        :green => 12,
-        :orange => 13,
-        :red => 14
-      },
-      1 => {
-        :green => 4,
-        :red => 5
+  class TrafficLightPiServer < Sinatra::Base
+    configure do
+      @@line_map = {
+        0 => {
+          :green => 12,
+          :orange => 13,
+          :red => 14
+        },
+        1 => {
+          :green => 4,
+          :red => 5
+        }
       }
-    }
+      @@lines = Hash.new(Hash.new(0))
+    end
+  end
 
-    @app || TrafficLightPiServer.new(line_mapping)
+  def app
+    @app || TrafficLightPiServer
   end
 
   # Do a root test

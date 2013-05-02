@@ -2,10 +2,9 @@
 require 'sinatra'
 
 class TrafficLightPiServer < Sinatra::Base
-  def initialize(line_mapping)
-    @@line_map = line_mapping
+  configure do
+    @@line_map = {}
     @@lines = Hash.new(Hash.new(0))
-    super
   end
 
   # Put a default page
