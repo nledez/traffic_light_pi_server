@@ -14,6 +14,7 @@ class TrafficLightPiServer < Sinatra::Base
         :red => 5
       }
     }
+    init_lights
   end
 end
 

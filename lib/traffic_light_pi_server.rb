@@ -2,9 +2,14 @@
 require 'sinatra'
 
 class TrafficLightPiServer < Sinatra::Base
-  configure do
-    @@line_map = {}
-    @@lines = Hash.new(Hash.new(0))
+  def self.init_lights
+    @@lines = Hash.new
+    @@line_map.each_key do |line|
+      @@lines[line] = Hash.new
+      @@line_map[line].each_key do |light|
+        @@lines[line][light] = 0
+      end
+    end
   end
 
   # Put a default page

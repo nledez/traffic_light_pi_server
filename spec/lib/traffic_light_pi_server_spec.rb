@@ -17,6 +17,7 @@ describe "My Traffic light server" do
           :red => 5
         }
       }
+      init_lights
     end
   end
 
