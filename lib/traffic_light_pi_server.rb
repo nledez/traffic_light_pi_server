@@ -1,5 +1,6 @@
 #! /usr/bin/env ruby
 require 'sinatra'
+require 'haml'
 
 class TrafficLightPiServer < Sinatra::Base
   def self.init_lights
@@ -14,7 +15,9 @@ class TrafficLightPiServer < Sinatra::Base
 
   # Put a default page
   get '/' do
-    "Hello World!"
+    @lines = @@lines
+    @line_map = @@line_map
+    haml :index, :format => :html5
   end
 
   # Get current status for one light/color in one line

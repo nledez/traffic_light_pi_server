@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
+    %title Traffic light server
+    %meta{:content => "width=device-width", :name => "viewport"}/
+    %link{:href => "onepcssgrid.css", :rel => "stylesheet"}/
+    %link{:href => "style.css", :media => "all", :rel => "stylesheet", :type => "text/css"}/
+    %script{ :src => 'http://code.jquery.com/jquery-1.9.1.js' }
+  %body
+    .onepcssgrid-1200
+      - (@line_map).each_key do |line|
+        .col2
+          = line
+          - (@line_map[line]).each_key do |light|
+            - state = @lines[line][light]
+            %div
+              %img{ :src => "images/#{light}-#{state}.png", :id => "#{line}-#{light}-#{state}", :class => "light" }
+    %script{ :src => 'traffic-light.js' }

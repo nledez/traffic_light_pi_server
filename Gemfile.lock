@@ -18,6 +18,7 @@ GEM
     guard-rspec (2.6.0)
       guard (>= 1.8)
       rspec (~> 2.13)
+    haml (3.1.7)
     listen (1.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -62,6 +63,7 @@ DEPENDENCIES
   guard
   guard-bundler
   guard-rspec
+  haml
   rack-test
   rb-fsevent
   rspec
