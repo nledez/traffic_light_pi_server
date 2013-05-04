@@ -3,6 +3,10 @@ source "https://rubygems.org"
 gem "sinatra"
 gem "haml"
 
+if RUBY_PLATFORM == 'arm-linux-eabihf'
+  gem "wiringpi"
+end
+
 group :test do
   gem 'rspec'
   gem 'rack-test'

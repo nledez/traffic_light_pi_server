@@ -32,17 +32,20 @@ describe "My Traffic light server" do
   end
 
   it "should get 0 for /0/red" do
+    get '/0/red/0'
     get '/0/red'
     last_response.should be_ok
     last_response.body.should == "14:0"
   end
 
   it "should get 0 for /1/red" do
+    get '/1/red/0'
     get '/1/red'
     last_response.body.should == "5:0"
   end
 
   it "should get 0 for /0/green" do
+    get '/0/green/0'
     get '/0/green'
     last_response.body.should == "12:0"
   end
