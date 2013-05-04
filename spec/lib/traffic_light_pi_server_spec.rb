@@ -7,12 +7,12 @@ describe "My Traffic light server" do
   class TrafficLightPiServer < Sinatra::Base
     configure do
       @@line_map = {
-        0 => {
+        :front => {
           :green => 12,
           :orange => 13,
           :red => 14
         },
-        1 => {
+        :left => {
           :green => 4,
           :red => 5
         }
@@ -31,75 +31,75 @@ describe "My Traffic light server" do
     last_response.should be_ok
   end
 
-  it "should get 0 for /0/red" do
-    get '/0/red/0'
-    get '/0/red'
+  it "should get 0 for /front/red" do
+    get '/front/red/0'
+    get '/front/red'
     last_response.should be_ok
     last_response.body.should == "14:0"
   end
 
-  it "should get 0 for /1/red" do
-    get '/1/red/0'
-    get '/1/red'
+  it "should get 0 for /left/red" do
+    get '/left/red/0'
+    get '/left/red'
     last_response.body.should == "5:0"
   end
 
-  it "should get 0 for /0/green" do
-    get '/0/green/0'
-    get '/0/green'
+  it "should get 0 for /front/green" do
+    get '/front/green/0'
+    get '/front/green'
     last_response.body.should == "12:0"
   end
 
-  it "should change color for /0/green" do
-    get '/0/green/0'
+  it "should change color for /front/green" do
+    get '/front/green/0'
 
-    get '/0/green'
+    get '/front/green'
     last_response.body.should == "12:0"
 
-    get '/0/green/1'
+    get '/front/green/1'
     last_response.body.should == "12:1"
 
-    get '/0/green'
+    get '/front/green'
     last_response.body.should == "12:1"
 
-    get '/0/green/0'
+    get '/front/green/0'
     last_response.body.should == "12:0"
 
-    get '/0/green'
-    last_response.body.should == "12:0"
-  end
-
-  it "should change color for /0/red and keep green status" do
-    get '/0/green/0'
-    get '/0/red/0'
-
-    get '/0/red'
-    last_response.body.should == "14:0"
-
-    get '/0/red/1'
-    last_response.body.should == "14:1"
-
-    get '/0/red'
-    last_response.body.should == "14:1"
-
-    get '/0/green'
+    get '/front/green'
     last_response.body.should == "12:0"
   end
 
-  it "should change color for /1/red and keep /0/red status" do
-    get '/0/red/0'
-    get '/1/red/0'
+  it "should change color for /front/red and keep green status" do
+    get '/front/green/0'
+    get '/front/red/0'
 
-    get '/0/red'
+    get '/front/red'
     last_response.body.should == "14:0"
 
-    get '/0/red/1'
+    get '/front/red/1'
     last_response.body.should == "14:1"
 
-    get '/0/red'
+    get '/front/red'
     last_response.body.should == "14:1"
 
-    get '/1/red'
+    get '/front/green'
+    last_response.body.should == "12:0"
+  end
+
+  it "should change color for /left/red and keep /front/red status" do
+    get '/front/red/0'
+    get '/left/red/0'
+
+    get '/front/red'
+    last_response.body.should == "14:0"
+
+    get '/front/red/1'
+    last_response.body.should == "14:1"
+
+    get '/front/red'
+    last_response.body.should == "14:1"
+
+    get '/left/red'
     last_response.body.should == "5:0"
   end
 end

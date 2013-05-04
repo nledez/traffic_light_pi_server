@@ -37,7 +37,7 @@ class TrafficLightPiServer < Sinatra::Base
 
   # Get current status for one light/color in one line
   get '/:line/:light' do
-    line = params[:line].to_i
+    line = params[:line].to_sym
     light = params[:light].to_sym
 
     pin = @@line_map[line][light]
@@ -47,7 +47,7 @@ class TrafficLightPiServer < Sinatra::Base
 
   # Set status of one light/light in one line
   get '/:line/:light/:state' do
-    line = params[:line].to_i
+    line = params[:line].to_sym
     light = params[:light].to_sym
     state = params[:state].to_i
 
