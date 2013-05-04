@@ -36,9 +36,6 @@ class TrafficLightPiServer < Sinatra::Base
     color = params[:color].to_sym
     state = params[:state]
 
-    @@lines[line] = Hash.new unless @@lines.has_key? line
-    @@lines[line][color] = Hash.new unless @@lines[line].has_key? color
-
     @@lines[line][color] = state
     pin = @@line_map[line][color.to_sym]
     "#{pin}:#{state}"
