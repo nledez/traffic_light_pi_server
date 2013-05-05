@@ -7,6 +7,10 @@ end
 
 class TrafficLightPiServer < Sinatra::Base
   def self.init_lights
+    unless defined? @@sound_dir
+      @@sound_dir = "#{File.dirname(__FILE__)}/sounds"
+    end
+
     @@pi_enabled = nil
     if RUBY_PLATFORM == 'arm-linux-eabihf'
       @@io = WiringPi::GPIO.new
@@ -33,6 +37,17 @@ class TrafficLightPiServer < Sinatra::Base
     @lines = @@lines
     @line_map = @@line_map
     haml :index, :format => :html5
+  end
+
+  get '/play/:sound' do
+    sound = params[:sound]
+    mp3 = "#{@@sound_dir}/#{sound}.mp3"
+    if File.exist? mp3
+      pid = fork{ exec 'mpg123','-q', mp3 }
+      "Played with pid: #{pid}"
+    else
+      status 404
+    end
   end
 
   # Get current status for one light/color in one line

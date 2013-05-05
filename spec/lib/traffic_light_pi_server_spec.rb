@@ -102,4 +102,15 @@ describe "My Traffic light server" do
     get '/left/red'
     last_response.body.should == "5:0"
   end
+
+  it "should return 404 if try to play a missing file" do
+    get '/play/missing-file'
+    last_response.status.should == 404
+  end
+
+  it "should play mp3" do
+    get '/play/clic'
+    last_response.should be_ok
+    last_response.body.should =~ /Played with pid: \d+/
+  end
 end
