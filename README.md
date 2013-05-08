@@ -16,3 +16,9 @@ Open a browser:
 http://<π address>:4567/
 
 Enjoy.
+
+Credits
+=======
+
+Thanks to msaling for lights:
+http://www.vectoropenstock.com/1358-Vector-Traffic-Light-vector

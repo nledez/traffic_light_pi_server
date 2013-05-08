@@ -11,7 +11,7 @@
     .onepcssgrid-1200
       - (@line_map).each_key do |line|
         .col2
-          = line
+          = line.capitalize
           - (@line_map[line]).each_key do |light|
             - state = @lines[line][light]
             %div
