@@ -32,6 +32,16 @@ class TrafficLightPiServer < Sinatra::Base
     end
   end
 
+  # A custom 500
+  error do
+    haml :'500'
+  end
+
+  # A custom 404
+  not_found do
+    haml :'404'
+  end
+
   # Put a default page
   get '/' do
     @lines = @@lines
@@ -65,6 +75,10 @@ class TrafficLightPiServer < Sinatra::Base
     line = params[:line].to_sym
     light = params[:light].to_sym
     state = params[:state].to_i
+
+    if state != 0 && state != 1
+      raise "Bad state value (must be 0 or 1)"
+    end
 
     pin = @@line_map[line][light.to_sym].to_i
     if @@pi_enabled

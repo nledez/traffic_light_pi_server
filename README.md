@@ -22,3 +22,9 @@ Credits
 
 Thanks to msaling for lights:
 http://www.vectoropenstock.com/1358-Vector-Traffic-Light-vector
+
+Thanks to Per aspera ad Astra for london traffic lights:
+http://commons.wikimedia.org/wiki/File:London_traffic-lights.JPG
+
+Thanks to jenniferboyer for broken traffic lights:
+http://www.flickr.com/photos/jenniferboyer/5252129732/

@@ -103,14 +103,26 @@ describe "My Traffic light server" do
     last_response.body.should == "5:0"
   end
 
+  it "should play mp3" do
+    get '/play/clic'
+    last_response.should be_ok
+    last_response.body.should =~ /Played with pid: \d+/
+  end
+
   it "should return 404 if try to play a missing file" do
     get '/play/missing-file'
     last_response.status.should == 404
   end
 
-  it "should play mp3" do
-    get '/play/clic'
-    last_response.should be_ok
-    last_response.body.should =~ /Played with pid: \d+/
+  it "should return a custom 404 error page" do
+    get '/left/red/bad/url'
+    last_response.status.should == 404
+    last_response.body.should =~ /traffic-lights-lost/
+  end
+
+  it "should return a custom 500 error page" do
+    get '/left/red/4'
+    last_response.status.should == 500
+    last_response.body.should =~ /traffic-lights-ko/
   end
 end
