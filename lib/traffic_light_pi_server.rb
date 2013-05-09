@@ -7,6 +7,10 @@ end
 
 class TrafficLightPiServer < Sinatra::Base
   def self.init_lights
+    unless defined? @@mp3player
+      @@mp3player = "mpg123"
+    end
+
     unless defined? @@sound_dir
       @@sound_dir = "#{File.dirname(__FILE__)}/sounds"
     end
@@ -53,7 +57,7 @@ class TrafficLightPiServer < Sinatra::Base
     sound = params[:sound]
     mp3 = "#{@@sound_dir}/#{sound}.mp3"
     if File.exist? mp3
-      pid = fork{ exec 'mpg123','-q', mp3 }
+      pid = fork{ exec @@mp3player, '-q', mp3 }
       "Played with pid: #{pid}"
     else
       status 404

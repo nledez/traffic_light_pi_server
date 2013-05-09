@@ -5,6 +5,7 @@ describe "My Traffic light server" do
   include Rack::Test::Methods
 
   class TrafficLightPiServer < Sinatra::Base
+    @@mp3player = "#{File.dirname(__FILE__)}/../mpg123-mock"
     configure do
       @@line_map = {
         :front => {
