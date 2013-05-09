@@ -79,13 +79,15 @@ describe "My Traffic light server" do
     last_response.status.should == 404
   end
 
-  it "should return a custom 404 & 500 error pages" do
-    get '/left/red/bad/url'
-    last_response.status.should == 404
-    last_response.body.should =~ /traffic-lights-lost/
+  unless ENV.has_key? 'TRAVIS'
+    it "should return a custom 404 & 500 error pages" do
+      get '/left/red/bad/url'
+      last_response.status.should == 404
+      last_response.body.should =~ /traffic-lights-lost/
 
-    get '/left/red/4'
-    last_response.status.should == 500
-    last_response.body.should =~ /traffic-lights-ko/
+      get '/left/red/4'
+      last_response.status.should == 500
+      last_response.body.should =~ /traffic-lights-ko/
+    end
   end
 end

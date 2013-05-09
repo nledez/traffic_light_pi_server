@@ -8,7 +8,6 @@ if RUBY_PLATFORM == 'arm-linux-eabihf'
 end
 
 group :test do
-  gem 'rake'
   gem 'rspec'
   gem 'rack-test'
 end
