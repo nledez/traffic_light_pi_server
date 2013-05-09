@@ -8,8 +8,12 @@ if RUBY_PLATFORM == 'arm-linux-eabihf'
 end
 
 group :test do
+  gem 'rake'
   gem 'rspec'
   gem 'rack-test'
+end
+
+group :developpement do
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-bundler'
