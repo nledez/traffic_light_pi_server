@@ -1,4 +1,3 @@
-#! /usr/bin/env ruby
 require 'sinatra'
 require 'haml'
 if RUBY_PLATFORM == 'arm-linux-eabihf'
