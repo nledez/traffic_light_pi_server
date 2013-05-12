@@ -6,6 +6,9 @@ Current build:
 [![Build Status](https://travis-ci.org/nledez/traffic_light_pi_server.png)](https://travis-ci.org/nledez/traffic_light_pi_server)
 [![Coverage Status](https://coveralls.io/repos/nledez/traffic_light_pi_server/badge.png)](https://coveralls.io/r/nledez/traffic_light_pi_server)
 [![Dependency Status](https://gemnasium.com/nledez/traffic_light_pi_server.png)](https://gemnasium.com/nledez/traffic_light_pi_server)
+[![Code Climate](https://codeclimate.com/github/nledez/traffic_light_pi_server.png)](https://codeclimate.com/github/nledez/traffic_light_pi_server)
+
+Yes Code Climate as a bad value, I watch this later.
 
 ## Installation
 
