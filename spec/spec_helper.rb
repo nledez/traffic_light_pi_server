@@ -1,3 +1,5 @@
+require 'simplecov'
+SimpleCov.start 'rails'
 require File.join(File.dirname(__FILE__), '../lib', 'traffic_light_pi_server.rb')
 
 require 'rack/test'
