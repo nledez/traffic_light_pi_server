@@ -68,6 +68,41 @@ describe "My Traffic light server" do
     last_response.body.should == "5:0"
   end
 
+  it "should reset lights" do
+    get '/front/green/0'
+    get '/front/red/1'
+    get '/left/red/1'
+
+    get '/front/reset'
+    get '/left/reset'
+
+    get '/front/green'
+    last_response.body.should == "12:1"
+
+    get '/front/red'
+    last_response.body.should == "14:0"
+
+    get '/left/red'
+    last_response.body.should == "5:0"
+  end
+
+  it "should reset lights" do
+    get '/front/green/0'
+    get '/front/red/1'
+    get '/left/red/1'
+
+    get '/reset'
+
+    get '/front/green'
+    last_response.body.should == "12:1"
+
+    get '/front/red'
+    last_response.body.should == "14:0"
+
+    get '/left/red'
+    last_response.body.should == "5:0"
+  end
+
   it "should play mp3" do
     get '/play/clic'
     last_response.should be_ok

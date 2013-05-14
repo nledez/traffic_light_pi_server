@@ -63,6 +63,44 @@ class TrafficLightPiServer < Sinatra::Base
     end
   end
 
+  # Reset all lines
+  get '/reset' do
+    @@line_map.each do |line, lights|
+      lights.each do |light, pin|
+        if light == :green
+          state = 1
+        else
+          state = 0
+        end
+        if @@pi_enabled
+          @@io.write(pin, state)
+          state = @@lines[line][light] = @@io.read(pin)
+        else
+          @@lines[line][light] = state
+        end
+      end
+    end
+  end
+
+  # Reset one line
+  get '/:line/reset' do
+    line = params[:line].to_sym
+
+    @@line_map[line].each do |light, pin|
+      if light == :green
+        state = 1
+      else
+        state = 0
+      end
+      if @@pi_enabled
+        @@io.write(pin, state)
+        state = @@lines[line][light] = @@io.read(pin)
+      else
+        @@lines[line][light] = state
+      end
+    end
+  end
+
   # Get current status for one light/color in one line
   get '/:line/:light' do
     line = params[:line].to_sym
