@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "traffic_light_pi_server"
-  spec.version       = "0.0.1"
+  spec.version       = "0.0.2"
   spec.authors       = ["Nicolas Ledez"]
   spec.email         = ["rubygems@ledez.net"]
   spec.description   = %q{A traffic light serveur for Raspberry π}
