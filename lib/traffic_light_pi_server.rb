@@ -80,6 +80,7 @@ class TrafficLightPiServer < Sinatra::Base
         end
       end
     end
+    "Reseted"
   end
 
   # Reset one line
@@ -99,6 +100,7 @@ class TrafficLightPiServer < Sinatra::Base
         @@lines[line][light] = state
       end
     end
+    "Reseted"
   end
 
   # Get current status for one light/color in one line
