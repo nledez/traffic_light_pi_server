@@ -25,7 +25,7 @@ class TrafficLightPiServer < Sinatra::Base
       @@lines[line] = Hash.new
       @@line_map[line].each_key do |light|
         if @@pi_enabled
-          pin = @@line_map[line][light]
+          pin = get_pin(line, light)
           @@io.mode(pin, OUTPUT)
           @@lines[line][light] = @@io.read(pin)
         else
@@ -66,19 +66,7 @@ class TrafficLightPiServer < Sinatra::Base
   # Reset all lines
   get '/reset' do
     @@line_map.each do |line, lights|
-      lights.each do |light, pin|
-        if light == :green
-          state = 1
-        else
-          state = 0
-        end
-        if @@pi_enabled
-          @@io.write(pin, state)
-          state = @@lines[line][light] = @@io.read(pin)
-        else
-          @@lines[line][light] = state
-        end
-      end
+      reset_line(line)
     end
     "Reseted"
   end
@@ -86,20 +74,8 @@ class TrafficLightPiServer < Sinatra::Base
   # Reset one line
   get '/:line/reset' do
     line = params[:line].to_sym
+    reset_line(line)
 
-    @@line_map[line].each do |light, pin|
-      if light == :green
-        state = 1
-      else
-        state = 0
-      end
-      if @@pi_enabled
-        @@io.write(pin, state)
-        state = @@lines[line][light] = @@io.read(pin)
-      else
-        @@lines[line][light] = state
-      end
-    end
     "Reseted"
   end
 
@@ -108,7 +84,7 @@ class TrafficLightPiServer < Sinatra::Base
     line = params[:line].to_sym
     light = params[:light].to_sym
 
-    pin = @@line_map[line][light]
+    pin = get_pin(line, light)
     state = @@lines[line][light.to_sym]
     "#{pin}:#{state}"
   end
@@ -123,7 +99,15 @@ class TrafficLightPiServer < Sinatra::Base
       raise "Bad state value (must be 0 or 1)"
     end
 
-    pin = @@line_map[line][light.to_sym].to_i
+    write_light(line, light, state)
+  end
+
+  def get_pin(line, light)
+    @@line_map[line][light]
+  end
+
+  def write_light(line, light, state)
+    pin = get_pin(line, light)
     if @@pi_enabled
       @@io.write(pin, state)
       state = @@lines[line][light] = @@io.read(pin)
@@ -131,5 +115,12 @@ class TrafficLightPiServer < Sinatra::Base
       @@lines[line][light] = state
     end
     "#{pin}:#{state}"
+  end
+
+  def reset_line(line)
+    @@line_map[line].each do |light, pin|
+      write_light(line, light, 0)
+    end
+    write_light(line, :green, 1)
   end
 end
