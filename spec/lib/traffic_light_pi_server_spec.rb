@@ -26,6 +26,15 @@ describe "My Traffic light server" do
     @app || TrafficLightPiServer
   end
 
+  before(:each) do
+    post '/reset'
+
+    @default_value = "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
+
+    get '/lines'
+    last_response.body.should == @default_value
+  end
+
   # Do a root test
   it "should respond to /" do
     get '/'
@@ -33,11 +42,6 @@ describe "My Traffic light server" do
   end
 
   it "should change status for different line & light" do
-    post '/reset'
-
-    get '/lines'
-    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
-
     get '/front/green'
     last_response.body.should == "1"
 
@@ -70,12 +74,6 @@ describe "My Traffic light server" do
   end
 
   it "should reset lights" do
-    post '/reset'
-    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
-
-    get '/lines'
-    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
-
     post '/front/green/0'
     post '/front/red/1'
     post '/left/red/1'
@@ -93,15 +91,10 @@ describe "My Traffic light server" do
     last_response.body.should == "{\"green\":1,\"red\":0}"
 
     get '/lines'
-    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
+    last_response.body.should == @default_value
   end
 
   it "should reset lights" do
-    post '/reset'
-
-    get '/lines'
-    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
-
     post '/front/green/0'
     post '/front/orange/1'
     post '/left/red/1'
@@ -110,10 +103,10 @@ describe "My Traffic light server" do
     last_response.body.should == "{\"front\":{\"green\":0,\"orange\":1,\"red\":0},\"left\":{\"green\":1,\"red\":1}}"
 
     post '/reset'
-    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
+    last_response.body.should == @default_value
 
     get '/lines'
-    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
+    last_response.body.should == @default_value
   end
 
   it "should play mp3" do
