@@ -33,74 +33,87 @@ describe "My Traffic light server" do
   end
 
   it "should change status for different line & light" do
-    get '/front/green/0'
-    get '/front/red/0'
-    get '/left/red/0'
+    post '/reset'
+
+    get '/lines'
+    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
 
     get '/front/green'
-    last_response.body.should == "12:0"
+    last_response.body.should == "1"
 
-    get '/front/green/1'
-    last_response.body.should == "12:1"
-
-    get '/front/green'
-    last_response.body.should == "12:1"
-
-    get '/front/green/0'
-    last_response.body.should == "12:0"
+    post '/front/green/1'
+    last_response.body.should == "1"
 
     get '/front/green'
-    last_response.body.should == "12:0"
+    last_response.body.should == "1"
+
+    post '/front/green/0'
+    last_response.body.should == "0"
+
+    get '/front/green'
+    last_response.body.should == "0"
 
     get '/front/red'
-    last_response.body.should == "14:0"
+    last_response.body.should == "0"
 
-    get '/front/red/1'
-    last_response.body.should == "14:1"
+    post '/front/red/1'
+    last_response.body.should == "1"
 
     get '/front/red'
-    last_response.body.should == "14:1"
+    last_response.body.should == "1"
 
     get '/front/green'
-    last_response.body.should == "12:0"
+    last_response.body.should == "0"
 
     get '/left/red'
-    last_response.body.should == "5:0"
+    last_response.body.should == "0"
   end
 
   it "should reset lights" do
-    get '/front/green/0'
-    get '/front/red/1'
-    get '/left/red/1'
+    post '/reset'
+    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
 
-    get '/front/reset'
-    get '/left/reset'
+    get '/lines'
+    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
 
-    get '/front/green'
-    last_response.body.should == "12:1"
+    post '/front/green/0'
+    post '/front/red/1'
+    post '/left/red/1'
 
-    get '/front/red'
-    last_response.body.should == "14:0"
+    get '/lines'
+    last_response.body.should == "{\"front\":{\"green\":0,\"orange\":0,\"red\":1},\"left\":{\"green\":1,\"red\":1}}"
 
-    get '/left/red'
-    last_response.body.should == "5:0"
+    post '/front/reset'
+    last_response.body.should == "{\"green\":1,\"orange\":0,\"red\":0}"
+
+    get '/lines'
+    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":1}}"
+
+    post '/left/reset'
+    last_response.body.should == "{\"green\":1,\"red\":0}"
+
+    get '/lines'
+    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
   end
 
   it "should reset lights" do
-    get '/front/green/0'
-    get '/front/red/1'
-    get '/left/red/1'
+    post '/reset'
 
-    get '/reset'
+    get '/lines'
+    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
 
-    get '/front/green'
-    last_response.body.should == "12:1"
+    post '/front/green/0'
+    post '/front/orange/1'
+    post '/left/red/1'
 
-    get '/front/red'
-    last_response.body.should == "14:0"
+    get '/lines'
+    last_response.body.should == "{\"front\":{\"green\":0,\"orange\":1,\"red\":0},\"left\":{\"green\":1,\"red\":1}}"
 
-    get '/left/red'
-    last_response.body.should == "5:0"
+    post '/reset'
+    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
+
+    get '/lines'
+    last_response.body.should == "{\"front\":{\"green\":1,\"orange\":0,\"red\":0},\"left\":{\"green\":1,\"red\":0}}"
   end
 
   it "should play mp3" do
@@ -120,7 +133,7 @@ describe "My Traffic light server" do
       last_response.status.should == 404
       last_response.body.should =~ /traffic-lights-lost/
 
-      get '/left/red/4'
+      post '/left/red/4'
       last_response.status.should == 500
       last_response.body.should =~ /traffic-lights-ko/
     end

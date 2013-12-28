@@ -1,19 +1,17 @@
 !!!
-%html
+%html{:lang => 'en', "ng-app" => "trafficLightApp" }
   %head
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
     %title Traffic light server
     %meta{:content => "width=device-width", :name => "viewport"}/
     %link{:href => "onepcssgrid.css", :rel => "stylesheet"}/
     %link{:href => "style.css", :media => "all", :rel => "stylesheet", :type => "text/css"}/
-    %script{ :src => 'http://code.jquery.com/jquery-1.9.1.js' }
-  %body
+    %script{ :src => 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js' }
+    %script{ :src => 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js' }
+  %body{"ng-controller" => "trafficLightCtrl"}
     .onepcssgrid-1200
-      - (@line_map).each_key do |line|
-        .col2
-          = line.capitalize
-          - (@line_map[line]).each_key do |light|
-            - state = @lines[line][light]
-            %div
-              %img{ :src => "images/#{light}-#{state}.png", :id => "#{line}-#{light}-#{state}", :class => "light" }
+      .col2{'ng-repeat' => '(name, line) in trafficlights'}
+        %span {{ name | uppercase }}
+        %div{'ng-repeat' => '(light, state) in line'}
+          %img{ 'ng-src' => "images/{{light}}-{{state}}.png", "ng-click" => "switchLight(name, light, state)", "id" => "{{line}}-{{light}}-{{state}}", :class => "light" }
     %script{ :src => 'traffic-light.js' }

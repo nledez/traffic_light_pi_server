@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "traffic_light_pi_server"
-  spec.version       = "0.0.3"
+  spec.version       = "1.1.0"
   spec.authors       = ["Nicolas Ledez"]
   spec.email         = ["rubygems@ledez.net"]
   spec.description   = %q{A traffic light serveur for Raspberry π}
@@ -17,10 +17,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "sinatra"
+  spec.add_dependency "sinatra-contrib"
   spec.add_dependency "haml"
   spec.add_dependency "wiringpi" if spec.platform.to_s == 'arm-linux-eabihf'
 
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
 
   spec.add_development_dependency "rspec"

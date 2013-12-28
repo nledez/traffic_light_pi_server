@@ -1,10 +1,13 @@
 require 'sinatra'
+require 'sinatra/json'
 require 'haml'
 if RUBY_PLATFORM == 'arm-linux-eabihf'
   require "wiringpi"
 end
 
 class TrafficLightPiServer < Sinatra::Base
+  helpers Sinatra::JSON
+
   def self.init_lights
     unless defined? @@mp3player
       @@mp3player = "mpg123"
@@ -52,6 +55,10 @@ class TrafficLightPiServer < Sinatra::Base
     haml :index, :format => :html5
   end
 
+  get '/lines' do
+    json @@lines
+  end
+
   get '/play/:sound' do
     sound = params[:sound]
     mp3 = "#{@@sound_dir}/#{sound}.mp3"
@@ -64,19 +71,18 @@ class TrafficLightPiServer < Sinatra::Base
   end
 
   # Reset all lines
-  get '/reset' do
+  post '/reset' do
     @@line_map.each do |line, lights|
       reset_line(line)
     end
-    "Reseted"
+    json @@lines
   end
 
   # Reset one line
-  get '/:line/reset' do
+  post '/:line/reset' do
     line = params[:line].to_sym
     reset_line(line)
-
-    "Reseted"
+    json @@lines[line]
   end
 
   # Get current status for one light/color in one line
@@ -84,13 +90,13 @@ class TrafficLightPiServer < Sinatra::Base
     line = params[:line].to_sym
     light = params[:light].to_sym
 
-    pin = get_pin(line, light)
-    state = @@lines[line][light.to_sym]
-    "#{pin}:#{state}"
+    #pin = get_pin(line, light)
+    #state = @@lines[line][light.to_sym]
+    json @@lines[line][light.to_sym]
   end
 
   # Set status of one light/light in one line
-  get '/:line/:light/:state' do
+  post '/:line/:light/:state' do
     line = params[:line].to_sym
     light = params[:light].to_sym
     state = params[:state].to_i
@@ -99,7 +105,7 @@ class TrafficLightPiServer < Sinatra::Base
       raise "Bad state value (must be 0 or 1)"
     end
 
-    write_light(line, light, state)
+    write_light(line, light, state).to_s
   end
 
   def get_pin(line, light)
@@ -110,11 +116,10 @@ class TrafficLightPiServer < Sinatra::Base
     pin = get_pin(line, light)
     if @@pi_enabled
       @@io.write(pin, state)
-      state = @@lines[line][light] = @@io.read(pin)
+      @@lines[line][light] = @@io.read(pin)
     else
       @@lines[line][light] = state
     end
-    "#{pin}:#{state}"
   end
 
   def reset_line(line)
